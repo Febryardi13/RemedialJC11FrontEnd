@@ -17,6 +17,18 @@
       "usia": "12",
       "pekerjaan": "asasas",
       "id": 3
+    },
+    {
+      "nama": "Saya",
+      "usia": "16",
+      "pekerjaan": "Buruh",
+      "id": 4
+    },
+    {
+      "nama": "Jajang",
+      "usia": "20",
+      "pekerjaan": "Buruh",
+      "id": 5
     }
   ]
 }

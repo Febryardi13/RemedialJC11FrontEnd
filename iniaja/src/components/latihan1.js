@@ -8,6 +8,7 @@ class Home extends Component{
     state={
         datakaryawan:[],
         modalEdit:false,
+        modalAdd:false,
         indexedit:-1,
         idEdit:-1,
         idDelete:-1,
@@ -16,8 +17,8 @@ class Home extends Component{
     componentDidMount () {
         Axios.get(`${APIURL}karyawan`)
         .then((res)=>{
-            console.log(res.data)
             this.setState({datakaryawan:res.data})
+            console.log(this.state.datakaryawan)
         })
         .catch((err)=>{
             console.log(err)
@@ -37,19 +38,6 @@ class Home extends Component{
                         <div className='col-md-6'> <input onClick={()=>this.btnDelete(index)} type='button' className='form-control btn-danger' value='Delete Data' /> </div>
                     </td>
                 </tr>
-            )
-        })
-    }
-
-    renderEditData = () =>{
-        return this.state.datakaryawan.map((val, index)=>{
-            return (
-                <div className='row'>
-                    <div className='col-md-3'> <input defaultValue={val.nama} type='text' className='form-control' placeholder='Nama' ref="nama" /> </div>
-                    <div className='col-md-3'> <input defaultValue={val.usia} type='number' className='form-control' placeholder='Usia' ref="usia" /> </div>
-                    <div className='col-md-3'> <input defaultValue={val.pekerjaan} type='text' className='form-control' placeholder='Pekerjaan' ref="pekerjaan" /> </div>
-                    <div className='col-md-3'> <input onClick={this.updateKaryawan} type='button' className='form-control btn-info' value='add Data' /> </div>
-                </div>
             )
         })
     }
@@ -102,11 +90,17 @@ class Home extends Component{
 
         Axios.post(`${APIURL}karyawan`, data)
         .then((res)=>{
-            this.setState({datakaryawan:res.data})
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: 'Berhasil ditambahkan!'
+            Axios.get(`${APIURL}karyawan`)
+            .then((res)=>{
+                this.setState({datakaryawan:res.data, modalAdd:false})
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Berhasil ditambahkan!'
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
             })
         })
         .catch((err)=>{
@@ -183,10 +177,27 @@ class Home extends Component{
                             <input type="text" defaultValue={datakaryawan[indexedit].pekerjaan} ref="editpekerjaan" className="form-control mt-2"/>
                         </ModalBody>
                         <ModalFooter>
-                            <button onClick={this.updateKaryawan} className="btn btn-success p-1">save</button>
+                            <button onClick={this.updateKaryawan} className="btn btn-success p-1">Save Data</button>
                         </ModalFooter>
                     </Modal>
                 }
+                <Modal centered isOpen={this.state.modalAdd} toggle={()=>this.setState({modalAdd:false})}>
+                    <ModalHeader>Add Karywan Baru</ModalHeader>
+                    <ModalBody>
+                        <input type="text" placeholder="Nama" ref="nama" className="form-control mt-2"/>
+                        <input type="number" placeholder="Usia" ref="usia" className="form-control mt-2"/>
+                        <input type="text" placeholder="Pekerjaan" ref="pekerjaan" className="form-control mt-2"/>
+                    </ModalBody>
+                    <ModalFooter>
+                        <button onClick={this.onBtnAdd} className="btn btn-success p-1">save</button>
+                        <button onClick={()=>this.setState({modalAdd:false})} className="btn btn-danger p-1">cancel</button>
+                    </ModalFooter>
+                </Modal>
+                <div className='row'>
+                    <div className='col-md-4 mb-4'>
+                        <button onClick={()=>this.setState({modalAdd:true})} className="btn btn-success p-2 mt-3" style={{fontSize:'14px'}}>Add Data</button>
+                    </div>
+                </div>
                 <table className='table mb-4'>
                     <thead>
                         <tr>
@@ -201,12 +212,6 @@ class Home extends Component{
                         {this.renderData()}
                     </tbody>
                 </table>
-                <div className='row'>
-                    <div className='col-md-3'> <input type='text' className='form-control' placeholder='Nama' ref="nama" /> </div>
-                    <div className='col-md-3'> <input type='number' className='form-control' placeholder='Usia' ref="usia" /> </div>
-                    <div className='col-md-3'> <input type='text' className='form-control' placeholder='Pekerjaan' ref="pekerjaan" /> </div>
-                    <div className='col-md-3'> <input onClick={this.onBtnAdd} type='button' className='form-control btn-info' value='add Data' /> </div>
-                </div>
             </div>
         )
     }
