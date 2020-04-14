@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 class Home extends Component{
     state={
         datakaryawan:[],
+        datasearch:[],
         modalEdit:false,
         modalAdd:false,
         indexedit:-1,
@@ -18,7 +19,7 @@ class Home extends Component{
         Axios.get(`${APIURL}karyawan`)
         .then((res)=>{
             this.setState({datakaryawan:res.data})
-            console.log(this.state.datakaryawan)
+            // console.log(this.state.datakaryawan)
         })
         .catch((err)=>{
             console.log(err)
@@ -44,7 +45,7 @@ class Home extends Component{
 
     onBtnEdit=(index)=>{
         var editKaryawan = this.state.datakaryawan
-        console.log(editKaryawan[index].id)
+        // console.log(editKaryawan[index].id)
         this.setState({indexedit:index, modalEdit:true, idEdit:editKaryawan[index].id})
     }
 
@@ -53,7 +54,7 @@ class Home extends Component{
         var usia = this.refs.editusia.value
         var pekerjaan = this.refs.editpekerjaan.value
         var newEdit = this.state.datakaryawan
-        console.log(this.state.idEdit)
+        // console.log(this.state.idEdit)
 
         var objnew = {nama:nama, usia:usia, pekerjaan:pekerjaan}
         newEdit.splice(this.state.indexedit,1,objnew)
@@ -151,6 +152,26 @@ class Home extends Component{
         })
     }
 
+    renderFilter = () =>{
+        var arrSearch = this.state.datakaryawan.map(val=>val.pekerjaan)
+        // console.log(arrSearch)
+        var uniqArr = []
+        for(var i=0; i < arrSearch.length; i++){
+            if(uniqArr.indexOf(arrSearch[i]) === -1){
+                uniqArr.push(arrSearch[i])
+            }
+        }
+
+        for(var j=0; j < uniqArr.length; j++){
+            return (
+                <select className='form-control'>
+                        <option>{uniqArr[j]}</option>
+                </select>
+            )
+            // console.log(uniqArr[j])
+        }
+    }
+
     render(){
         const {datakaryawan, indexedit} = this.state
         const {length} = datakaryawan
@@ -162,9 +183,7 @@ class Home extends Component{
                 <h1>SOAL 1</h1>
                 <div className='row'>
                     <div className='col-md-4 mb-4'>
-                        <select className='form-control'>
-                            <option>Filter By Pekerjaan</option>
-                        </select>
+                        {this.renderFilter()}
                     </div>
                 </div>
                 {
