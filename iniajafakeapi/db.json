@@ -1,0 +1,22 @@
+{
+  "karyawan": [
+    {
+      "nama": "Febryasas",
+      "usia": "171212",
+      "pekerjaan": "wirausaha aaa111",
+      "id": 1
+    },
+    {
+      "nama": "Ardiaaaaa AAAA",
+      "usia": "20",
+      "pekerjaan": "wiraswasta",
+      "id": 2
+    },
+    {
+      "nama": "ssas",
+      "usia": "12",
+      "pekerjaan": "asasas",
+      "id": 3
+    }
+  ]
+}
